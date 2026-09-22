@@ -4,3 +4,15 @@
 - type: A
   name: ia
   content: 192.168.0.4
+- type: A
+  name: rundeck
+  content: 192.168.0.4
+- type: A
+  name: mimir
+  content: 192.168.0.4
+- type: A
+  name: grafana
+  content: 192.168.0.4
+- type: A
+  name: jenkins
+  content: 192.168.0.4
