@@ -1,1 +1,6 @@
-[]
+- type: A
+  name: argocd
+  content: 192.168.0.4
+- type: A
+  name: ia
+  content: 192.168.0.4
