@@ -1,3 +1,7 @@
+locals {
+  cloudflare_api_token = get_env("CLOUDFLARE_API_TOKEN")
+}
+
 remote_state {
   backend = "local"
   config = {

@@ -68,20 +68,35 @@ laranja do Cloudflare). `priority` só é necessário pra `MX`/`SRV`/`URI`.
 Múltiplos registros `TXT` no mesmo `name` (ex.: SPF + verificação de
 domínio) são só duas entradas na lista, cada uma com seu `content`.
 
+## Token do Cloudflare (uma vez por máquina)
+
+Mesmo modelo usado no repositório de DNS da empresa (lá com
+`TF_VAR_BACKEND_USER`/`TF_VAR_BACKEND_PASSWORD`): a credencial fica
+exportada no `~/.bashrc` de quem roda, nunca no repositório. Rode uma vez,
+colando o token quando pedir (não aparece na tela nem no histórico):
+
+```bash
+read -rsp "Token Cloudflare: " T; echo
+printf 'export CLOUDFLARE_API_TOKEN=%q\n' "$T" >> ~/.bashrc; unset T
+chmod 600 ~/.bashrc
+. ~/.bashrc
+```
+
+O `root.hcl` exige a variável (`get_env("CLOUDFLARE_API_TOKEN")`): sem ela,
+o terragrunt para logo no início com "Required environment variable
+CLOUDFLARE_API_TOKEN - not found", em vez de um 403 da API do Cloudflare.
+O provider lê a variável direto do ambiente, então o token não é gravado
+em nenhum arquivo gerado (`provider.tf`, `.terragrunt-cache`). Token
+trocado no Cloudflare? Edite a linha no `~/.bashrc`.
+
 ## Uso
 
 ```bash
-export CLOUDFLARE_API_TOKEN="cole_aqui_na_hora"
-
 cd diegofnunesbr.com
 terragrunt init
 terragrunt plan
 terragrunt apply
 ```
-
-O provider Cloudflare lê `CLOUDFLARE_API_TOKEN` do ambiente
-automaticamente - não precisa (nem deve) aparecer em nenhum arquivo
-deste repositório.
 
 ## Adicionar uma zona nova
 
