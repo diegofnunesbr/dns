@@ -77,17 +77,27 @@ colando o token quando pedir (não aparece na tela nem no histórico):
 
 ```bash
 read -rsp "Token Cloudflare: " T; echo
+sed -i '/^export CLOUDFLARE_API_TOKEN=/d' ~/.bashrc
 printf 'export CLOUDFLARE_API_TOKEN=%q\n' "$T" >> ~/.bashrc; unset T
 chmod 600 ~/.bashrc
 . ~/.bashrc
 ```
 
+O mesmo bloco serve pra trocar o token depois: o `sed` apaga a linha
+antiga antes de gravar a nova. Pra conferir, sem mostrar o valor:
+`grep -c CLOUDFLARE_API_TOKEN ~/.bashrc` tem que dar `1`.
+
+**O cert-manager usa o mesmo token** (secret `cert-manager-secret`, pro
+desafio DNS-01 dos certificados). Trocou aqui? Sele o novo lá também,
+seguindo "Gerar o SealedSecret cert-manager-secret" no README do
+repositório `cert-manager`, e só depois revogue o antigo na Cloudflare.
+Senão a renovação dos certificados começa a falhar.
+
 O `root.hcl` exige a variável (`get_env("CLOUDFLARE_API_TOKEN")`): sem ela,
 o terragrunt para logo no início com "Required environment variable
 CLOUDFLARE_API_TOKEN - not found", em vez de um 403 da API do Cloudflare.
 O provider lê a variável direto do ambiente, então o token não é gravado
-em nenhum arquivo gerado (`provider.tf`, `.terragrunt-cache`). Token
-trocado no Cloudflare? Edite a linha no `~/.bashrc`.
+em nenhum arquivo gerado (`provider.tf`, `.terragrunt-cache`).
 
 ## Uso
 
