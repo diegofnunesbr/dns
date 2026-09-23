@@ -16,3 +16,6 @@
 - type: A
   name: jenkins
   content: 192.168.0.4
+- type: A
+  name: image-to-pdf
+  content: 192.168.0.4
