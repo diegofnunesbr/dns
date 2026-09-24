@@ -20,5 +20,5 @@
   name: pdf
   content: 192.168.0.4
 - type: A
-  name: sso
+  name: keycloak
   content: 192.168.0.4
